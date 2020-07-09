@@ -24,13 +24,12 @@ namespace WatchList_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IWatchItemRepository<PlannedWatchItem>, PlannedWatchItemRepository>();
             services.AddTransient<IQuery<GetAllActiveWatchItemsRequest, GetAllActiveWatchItemsResponse>, GetAllActiveWatchItemsQuery>();
         }
 
         public void ConfigureContainer(IServiceContainer container)
         {
-            //container.RegisterFrom<CompositionRoot>();
+            container.RegisterFrom<CompositionRoot>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
