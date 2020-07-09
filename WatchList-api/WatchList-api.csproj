@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>WatchList_api</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.35" />
+      <PackageReference Include="LightInject" Version="6.3.4" />
+      <PackageReference Include="LightInject.Microsoft.Hosting" Version="1.2.1" />
+      <PackageReference Include="Npgsql" Version="5.0.0-alpha1" />
+    </ItemGroup>
+
+
+</Project>

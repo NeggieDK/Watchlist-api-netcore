@@ -1,0 +1,8 @@
+﻿.idea
+.vs
+WatchList-api.sln.postbuild.ps1
+WatchList-api.sln.prebuild.ps1
+WatchList-api/bin
+WatchList-api/obj
+WatchList-api.Test/bin
+WatchList-api.Test/obj
