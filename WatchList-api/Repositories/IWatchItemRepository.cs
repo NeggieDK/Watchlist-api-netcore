@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using WatchList_api.CQRS;
 using WatchList_api.DTO;
 
 namespace WatchList_api.Repositories
 {
-    public interface IWatchItemRepository<T> where T : BaseWatchItem
+    public interface IWatchItemRepository<TQuery, TCommand> where TQuery : BaseWatchItem
     {
-        public List<T> GetAll(Guid userId);
-        public T Get(Guid id, Guid userId);
-        public int Create(T watchItem);
-        public int Update(Guid userId, T watchItem);
-        public int Delete(Guid index);
+        public List<TQuery> GetAll(Guid userId);
+        public TQuery Get(Guid id, Guid userId);
+        public CommandResult Create(TCommand watchItem);
+        public CommandResult Update(Guid id, Guid userId, TCommand watchItem);
+        public CommandResult Delete(Guid id, Guid userId);
     }
 }

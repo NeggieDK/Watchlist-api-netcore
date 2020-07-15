@@ -1,7 +1,9 @@
-﻿namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
+﻿using System;
+
+namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
 {
     public class CreateActiveWatchItemResponse
     {
-        public bool Success { get; set; }
+        public CommandResult Result { get; set; }
     }
 }

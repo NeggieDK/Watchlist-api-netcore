@@ -1,9 +1,10 @@
-﻿using WatchList_api.DTO;
+﻿using System;
 
 namespace WatchList_api.CQRS.ActiveWatchItems.Commands.DeleteActiveWatchItem
 {
     public class DeleteActiveWatchItemRequest
     {
-        public ActiveWatchItem WatchItem { get; set; }
+        public Guid Id{ get; set; }
+        public Guid UserId { get; set; }
     }
 }

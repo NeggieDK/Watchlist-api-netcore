@@ -2,6 +2,6 @@
 {
     public class DeleteActiveWatchItemResponse
     {
-        public bool Success { get; set; }
+        public CommandResult Result { get; set; }
     }
 }

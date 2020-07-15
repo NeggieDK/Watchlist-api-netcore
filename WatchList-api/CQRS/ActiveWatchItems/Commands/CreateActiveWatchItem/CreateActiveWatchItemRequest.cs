@@ -4,6 +4,10 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
 {
     public class CreateActiveWatchItemRequest
     {
-        public ActiveWatchItem WatchItem { get; set; }
+        public CreateActiveWatchItemRequest(ActiveWatchItemChange watchItem)
+        {
+            WatchItem = watchItem;
+        }
+        public ActiveWatchItemChange WatchItem { get; set; }
     }
 }

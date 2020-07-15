@@ -8,7 +8,7 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Queries.GetAllActiveWatchItems
 {
     public class GetAllActiveWatchItemsQuery : IQuery<GetAllActiveWatchItemsRequest, GetAllActiveWatchItemsResponse>, IAutoRegisterQueryOrCommand
     {
-        private const string TABLE = "active_watch_items";
+        private const string TABLE = "active_watch_items_with_details";
         private const string SCHEMA = "public";
 
         private readonly IDapperConnection _connection;
@@ -21,11 +21,9 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Queries.GetAllActiveWatchItems
         {
             using (var conn = _connection.GetConnection())
             {
-                var sql = "SELECT a.id, created_at as CreatedAt, last_episode_watched as LastEpisodeWatched, b.title, b.genres " +
-                    "FROM public.active_watch_items as a " +
-                    "left join public.watch_items as b " +
-                    "on a.fk_watch_items = b.id " +
-                    "where fk_user_id = @UserId";
+                var sql = $"SELECT id, createdat, lastepisodewatched, title, genres " +
+                    $"FROM {SCHEMA}.{TABLE} " +
+                    $"WHERE fk_user_id = @UserId";
                 var result = conn.Query<ActiveWatchItem>(sql, new { UserId = request.UserId }).ToList();
                 return new GetAllActiveWatchItemsResponse { WatchItems = result };
             }

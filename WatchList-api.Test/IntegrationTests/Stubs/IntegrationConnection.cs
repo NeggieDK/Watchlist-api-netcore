@@ -4,7 +4,7 @@ using WatchList_api.Repositories.DatabaseConnection;
 
 namespace WatchList.IntegrationTests.Stubs
 {
-    public class IntegrationSqlConnection : IDapperConnection
+    public class IntegrationConnection : IDapperConnection
     {
         public DbConnection GetConnection()
         {
