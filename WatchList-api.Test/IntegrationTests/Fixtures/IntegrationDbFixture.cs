@@ -36,7 +36,7 @@ namespace WatchList.IntegrationTests.Fixtures
             {
                 foreach (var guid in _guidsToDelete)
                 {
-                    //conn.Execute($"DELETE FROM planned_watch_item where id = @Guid", new{Guid = guid});
+                    conn.Execute($"DELETE FROM planned_watch_items where id = @Guid", new{Guid = guid});
                     conn.Execute($"DELETE FROM active_watch_items where id = @Guid", new{Guid = guid});
                     //conn.Execute($"DELETE FROM dropped_watch_item where id = @Guid", new{Guid = guid});
                     //conn.Execute($"DELETE FROM completed_watch_item where id  = @Guid", new{Guid = guid});

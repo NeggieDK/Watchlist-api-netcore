@@ -1,42 +1,55 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using WatchList_api.DTO;
-//using WatchList_api.Repositories.DatabaseConnection;
+﻿using System;
+using System.Collections.Generic;
+using WatchList_api.CQRS;
+using WatchList_api.CQRS.ActiveWatchItems.Queries.GetAllPlannedWatchItems;
+using WatchList_api.CQRS.ActiveWatchItems.Queries.GetPlannedWatchItem;
+using WatchList_api.CQRS.Interfaces;
+using WatchList_api.CQRS.PlannedWatchItems.Commands.CreatePlannedWatchItem;
+using WatchList_api.CQRS.PlannedWatchItems.Commands.DeletePlannedWatchItem;
+using WatchList_api.DTO;
 
-//namespace WatchList_api.Repositories
-//{
-//    public class PlannedWatchItemRepository : IWatchItemRepository<PlannedWatchItem>
-//    {
-//        private const string PlannedTable = "planned_watch_item";
-//        private readonly IDapperConnection _connection;
-//        public PlannedWatchItemRepository(IDapperConnection connection)
-//        {
-//            _connection = connection;
-//        }
+namespace WatchList_api.Repositories
+{
+    public class PlannedWatchItemRepository : IWatchItemRepository<PlannedWatchItem, PlannedWatchItemChange>
+    {
+        private readonly IQuery<GetAllPlannedWatchItemsRequest, GetAllPlannedWatchItemsResponse> _getAllPlannedWatchItemsQuery;
+        private readonly IQuery<GetPlannedWatchItemRequest, GetPlannedWatchItemResponse> _getPlannedWatchItemQuery;
+        private readonly ICommand<CreatePlannedWatchItemRequest, CreatePlannedWatchItemResponse> _createPlannedWatchItem;
+        private readonly ICommand<DeletePlannedWatchItemRequest, DeletePlannedWatchItemResponse> _deletePlannedWatchItem;
+        private readonly ICommand<UpdatePlannedWatchItemRequest, UpdatePlannedWatchItemResponse> _updatePlannedWatchItem;
 
-//        public int Create(PlannedWatchItem watchItem)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public PlannedWatchItemRepository(IQuery<GetAllPlannedWatchItemsRequest, GetAllPlannedWatchItemsResponse> getAllPlannedWatchItemsQuery, IQuery<GetPlannedWatchItemRequest, GetPlannedWatchItemResponse> getPlannedWatchItemQuery, ICommand<CreatePlannedWatchItemRequest, CreatePlannedWatchItemResponse> createPlannedWatchItem, ICommand<DeletePlannedWatchItemRequest, DeletePlannedWatchItemResponse> deletePlannedWatchItem, ICommand<UpdatePlannedWatchItemRequest, UpdatePlannedWatchItemResponse> updatePlannedWatchItem)
+        {
+            _getAllPlannedWatchItemsQuery = getAllPlannedWatchItemsQuery;
+            _getPlannedWatchItemQuery = getPlannedWatchItemQuery;
+            _createPlannedWatchItem = createPlannedWatchItem;
+            _deletePlannedWatchItem = deletePlannedWatchItem;
+            _updatePlannedWatchItem = updatePlannedWatchItem;
+        }
 
-//        public int Delete(Guid index)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public CommandResult Create(PlannedWatchItemChange watchItem)
+        {
+            return _createPlannedWatchItem.Execute(new CreatePlannedWatchItemRequest(watchItem)).Result;
+        }
 
-//        public PlannedWatchItem Get(Guid id, Guid userId)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public CommandResult Delete(Guid id, Guid userId)
+        {
+            return _deletePlannedWatchItem.Execute(new DeletePlannedWatchItemRequest { Id = id, UserId = userId }).Result;
+        }
 
-//        public List<PlannedWatchItem> GetAll(Guid userId)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public PlannedWatchItem Get(Guid id, Guid userId)
+        {
+            return _getPlannedWatchItemQuery.Execute(new GetPlannedWatchItemRequest { Id = id, UserId = userId }).WatchItems;
+        }
 
-//        public int Update(Guid userId, PlannedWatchItem watchItem)
-//        {
-//            throw new NotImplementedException();
-//        }
-//    }
-//}
+        public List<PlannedWatchItem> GetAll(Guid userId)
+        {
+            return _getAllPlannedWatchItemsQuery.Execute(new GetAllPlannedWatchItemsRequest { UserId = userId }).WatchItems;
+        }
+
+        public CommandResult Update(Guid id, Guid userId, PlannedWatchItemChange watchItem)
+        {
+            return _updatePlannedWatchItem.Execute(new UpdatePlannedWatchItemRequest { Id = id, UserId = userId, WatchItem = watchItem }).Result;
+        }
+    }
+}

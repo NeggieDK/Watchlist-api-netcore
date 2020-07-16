@@ -11,6 +11,7 @@ namespace WatchList_api.Test.IntegrationTests.Stubs
         public void Compose(IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<IWatchItemRepository<ActiveWatchItem, ActiveWatchItemChange>, ActiveWatchItemRepository>();
+            serviceRegistry.Register<IWatchItemRepository<PlannedWatchItem, PlannedWatchItemChange>, PlannedWatchItemRepository>();
             serviceRegistry.Register<IDapperConnection, IntegrationConnection>();
             AutoRegisterManager.AutoRegisterFromInterface(serviceRegistry, typeof(IAutoRegisterQueryOrCommand));
         }
