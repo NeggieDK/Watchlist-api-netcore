@@ -5,7 +5,7 @@ using WatchList_api.Repositories.DatabaseConnection;
 
 namespace WatchList_api.CQRS.PlannedWatchItems.Commands.CreatePlannedWatchItem
 {
-    public class CreatePlannedWatchItemCommand : ICommand<CreatePlannedWatchItemRequest, CreatePlannedWatchItemResponse>, IAutoRegisterQueryOrCommand
+    public class CreatePlannedWatchItemCommand : ICommand<CreatePlannedWatchItemRequest, CreatePlannedWatchItemResponse>, IAutoRegisterCommand
     {
         private const string TABLE = "planned_watch_items";
         private const string SCHEMA = "public";

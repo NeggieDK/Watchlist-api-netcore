@@ -4,7 +4,7 @@ using WatchList_api.Repositories.DatabaseConnection;
 
 namespace WatchList_api.CQRS.ActiveWatchItems.Commands.DeleteActiveWatchItem
 {
-    public class DeleteActiveWatchItemCommand : ICommand<DeleteActiveWatchItemRequest, DeleteActiveWatchItemResponse>, IAutoRegisterQueryOrCommand
+    public class DeleteActiveWatchItemCommand : ICommand<DeleteActiveWatchItemRequest, DeleteActiveWatchItemResponse>, IAutoRegisterCommand
     {
         private const string TABLE = "active_watch_items";
         private const string SCHEMA = "public";

@@ -1,27 +1,50 @@
 ﻿using LightInject;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using WatchList_api.CQRS;
 
 namespace WatchList_api
 {
     public static class AutoRegisterManager
     {
-        public static void AutoRegisterFromInterface(IServiceRegistry serviceRegistry, Type interfaceType)
+        public static void AutoRegisterIQuery(IServiceRegistry serviceRegistry, bool withDecorators)
         {
-            if (!interfaceType.IsInterface) throw new InterfaceOnlyException();
             var registeredTypes = typeof(Startup)
                .Assembly
                .GetTypes()
-               .Where(i => interfaceType.IsAssignableFrom(i));
+               .Where(i => typeof(IAutoRegisterQuery).IsAssignableFrom(i));
 
             foreach (var regType in registeredTypes)
             {
-                var interfaceTypes = regType.GetInterfaces();
-                foreach (var intType in interfaceTypes)
+                var intType = regType.GetInterfaces().Where(i => i != typeof(IAutoRegisterQuery)).SingleOrDefault();
+                if (intType == null) continue;
+                serviceRegistry.Register(intType, regType);
+                Debug.WriteLine($"Registered {regType} for {intType}");
+                if (withDecorators)
                 {
-                    if (intType.Name == nameof(interfaceType)) continue;
-                    serviceRegistry.Register(intType, regType);
+                    var genericTypes = intType.GetGenericArguments();
+                    var performanceDecoratorGeneric = typeof(QueryPerformanceDecorator<,>);
+                    var constructedGeneric = performanceDecoratorGeneric.MakeGenericType(genericTypes);
+                    serviceRegistry.Decorate(intType, constructedGeneric);
+                    Debug.WriteLine($"Decorated {intType} for {constructedGeneric}");
                 }
+            }
+        }
+
+        public static void AutoRegisterICommand(IServiceRegistry serviceRegistry, bool withDecorators)
+        {
+            var registeredTypes = typeof(Startup)
+               .Assembly
+               .GetTypes()
+               .Where(i => typeof(IAutoRegisterCommand).IsAssignableFrom(i));
+
+            foreach (var regType in registeredTypes)
+            {
+                var intType = regType.GetInterfaces().Where(i => i != typeof(IAutoRegisterCommand)).SingleOrDefault();
+                if (intType == null) continue;
+                serviceRegistry.Register(intType, regType);
+                Debug.WriteLine($"Registered {regType} for {intType}");
             }
         }
     }

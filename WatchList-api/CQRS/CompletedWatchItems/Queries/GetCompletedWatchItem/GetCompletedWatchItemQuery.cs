@@ -6,7 +6,7 @@ using WatchList_api.Repositories.DatabaseConnection;
 
 namespace WatchList_api.CQRS.CompletedWatchItems.Queries.GetCompletedWatchItem
 {
-    public class GetCompletedWatchItemQuery : IQuery<GetCompletedWatchItemRequest, GetCompletedWatchItemResponse>, IAutoRegisterQueryOrCommand
+    public class GetCompletedWatchItemQuery : IQuery<GetCompletedWatchItemRequest, GetCompletedWatchItemResponse>, IAutoRegisterQuery
     {
         private const string TABLE = "completed_watch_items_with_details";
         private const string SCHEMA = "public";

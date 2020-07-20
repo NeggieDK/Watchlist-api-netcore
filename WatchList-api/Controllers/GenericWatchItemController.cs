@@ -23,9 +23,9 @@ namespace WatchList_api.Controllers
         }
         
         [HttpGet("/{identifier}")]
-        public virtual TResult Get(string identifier)
+        public virtual TResult Get(Guid identifier)
         {
-            return _repository.Get(Guid.Parse(identifier), Guid.NewGuid());
+            return _repository.Get(identifier, Guid.NewGuid());
         }
         
         [HttpPost]
@@ -34,18 +34,18 @@ namespace WatchList_api.Controllers
             _repository.Create(watchItem);
         }
         
-        [HttpPut]
-        public virtual void Update(TInput watchItem)
+        [HttpPut("/{identifier}")]
+        public virtual void Update(Guid identifier, TInput watchItem)
         {
-            _repository.Update(Guid.NewGuid(), Guid.NewGuid(), watchItem);
+            _repository.Update(identifier, Guid.NewGuid(), watchItem);
         }
         
-        [HttpDelete]
-        public virtual void Delete(Guid id)
+        [HttpDelete("/{identifier}")]
+        public virtual void Delete(Guid identifier)
         {
             //Get Guid from object
             var userGuid = Guid.NewGuid();
-            _repository.Delete(id, userGuid);
+            _repository.Delete(identifier, userGuid);
         }
     }
 }

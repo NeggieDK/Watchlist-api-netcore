@@ -15,7 +15,8 @@ namespace WatchList_api.Test.IntegrationTests.Stubs
             serviceRegistry.Register<IWatchItemRepository<DroppedWatchItem, DroppedWatchItemChange>, DroppedWatchItemRepository>();
             serviceRegistry.Register<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>, CompletedWatchItemRepository>();
             serviceRegistry.Register<IDapperConnection, IntegrationConnection>();
-            AutoRegisterManager.AutoRegisterFromInterface(serviceRegistry, typeof(IAutoRegisterQueryOrCommand));
+            AutoRegisterManager.AutoRegisterIQuery(serviceRegistry, false);
+            AutoRegisterManager.AutoRegisterICommand(serviceRegistry, false);
         }
     }
 }

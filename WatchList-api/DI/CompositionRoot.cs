@@ -9,10 +9,13 @@ namespace WatchList_api
     {
         public void Compose(IServiceRegistry serviceRegistry)
         {
-            //serviceRegistry.Register<IWatchItemRepository<PlannedWatchItem>, PlannedWatchItemRepository>();
             serviceRegistry.Register<IWatchItemRepository<ActiveWatchItem, ActiveWatchItemChange>, ActiveWatchItemRepository>();
+            serviceRegistry.Register<IWatchItemRepository<PlannedWatchItem, PlannedWatchItemChange>, PlannedWatchItemRepository>();
+            serviceRegistry.Register<IWatchItemRepository<DroppedWatchItem, DroppedWatchItemChange>, DroppedWatchItemRepository>();
+            serviceRegistry.Register<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>, CompletedWatchItemRepository>();
             serviceRegistry.Register<IDapperConnection, NpgsqlDapperConnection>();
-            AutoRegisterManager.AutoRegisterFromInterface(serviceRegistry, typeof(IAutoRegisterQueryOrCommand));
+            AutoRegisterManager.AutoRegisterIQuery(serviceRegistry, true);
+            AutoRegisterManager.AutoRegisterICommand(serviceRegistry, true);
         }
     }
 }
