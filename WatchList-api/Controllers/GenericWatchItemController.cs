@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WatchList_api.DTO;
-using WatchList_api.DTO;
 using WatchList_api.Repositories;
 
 namespace WatchList_api.Controllers
@@ -22,10 +21,10 @@ namespace WatchList_api.Controllers
             return _repository.GetAll(Guid.NewGuid());
         }
         
-        [HttpGet("/{identifier}")]
-        public virtual TResult Get(Guid identifier)
+        [HttpGet("{identifier}")]
+        public virtual TResult Get(string identifier)
         {
-            return _repository.Get(identifier, Guid.NewGuid());
+            return _repository.Get(Guid.NewGuid(), Guid.NewGuid());
         }
         
         [HttpPost]
@@ -34,13 +33,13 @@ namespace WatchList_api.Controllers
             _repository.Create(watchItem);
         }
         
-        [HttpPut("/{identifier}")]
+        [HttpPut("{identifier}")]
         public virtual void Update(Guid identifier, TInput watchItem)
         {
             _repository.Update(identifier, Guid.NewGuid(), watchItem);
         }
         
-        [HttpDelete("/{identifier}")]
+        [HttpDelete("{identifier}")]
         public virtual void Delete(Guid identifier)
         {
             //Get Guid from object
