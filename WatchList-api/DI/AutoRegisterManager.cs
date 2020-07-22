@@ -20,14 +20,15 @@ namespace WatchList_api
                 var intType = regType.GetInterfaces().Where(i => i != typeof(IAutoRegisterQuery)).SingleOrDefault();
                 if (intType == null) continue;
                 serviceRegistry.Register(intType, regType);
-                Debug.WriteLine($"Registered {regType} for {intType}");
                 if (withDecorators)
                 {
                     var genericTypes = intType.GetGenericArguments();
                     var performanceDecoratorGeneric = typeof(QueryPerformanceDecorator<,>);
-                    var constructedGeneric = performanceDecoratorGeneric.MakeGenericType(genericTypes);
-                    serviceRegistry.Decorate(intType, constructedGeneric);
-                    Debug.WriteLine($"Decorated {intType} for {constructedGeneric}");
+                    var errorLoggingDecoratorGeneric = typeof(ErrorLoggingDecorator<,>);
+                    var constructedPerformanceGeneric = performanceDecoratorGeneric.MakeGenericType(genericTypes);
+                    var constructedErrorLoggingGeneric = errorLoggingDecoratorGeneric.MakeGenericType(genericTypes);
+                    serviceRegistry.Decorate(intType, constructedPerformanceGeneric);
+                    serviceRegistry.Decorate(intType, constructedErrorLoggingGeneric);
                 }
             }
         }
