@@ -27,8 +27,8 @@ namespace WatchList_api
                     var errorLoggingDecoratorGeneric = typeof(ErrorLoggingDecorator<,>);
                     var constructedPerformanceGeneric = performanceDecoratorGeneric.MakeGenericType(genericTypes);
                     var constructedErrorLoggingGeneric = errorLoggingDecoratorGeneric.MakeGenericType(genericTypes);
-                    serviceRegistry.Decorate(intType, constructedPerformanceGeneric);
                     serviceRegistry.Decorate(intType, constructedErrorLoggingGeneric);
+                    serviceRegistry.Decorate(intType, constructedPerformanceGeneric);
                 }
             }
         }

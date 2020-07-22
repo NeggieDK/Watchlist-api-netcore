@@ -9,6 +9,7 @@ namespace WatchList_api
     {
         public void Compose(IServiceRegistry serviceRegistry)
         {
+
             serviceRegistry.Register<IWatchItemRepository<ActiveWatchItem, ActiveWatchItemChange>, ActiveWatchItemRepository>();
             serviceRegistry.Register<IWatchItemRepository<PlannedWatchItem, PlannedWatchItemChange>, PlannedWatchItemRepository>();
             serviceRegistry.Register<IWatchItemRepository<DroppedWatchItem, DroppedWatchItemChange>, DroppedWatchItemRepository>();
