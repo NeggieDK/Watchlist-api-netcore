@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WatchList_api.DTO;
 using WatchList_api.Repositories;
 
 namespace WatchList_api.Controllers
 {
+    [Authorize]
     public abstract class GenericWatchItemController<TResult, TInput> : Controller where TResult : BaseWatchItem
     {
         private readonly IWatchItemRepository<TResult, TInput> _repository;
@@ -19,13 +21,15 @@ namespace WatchList_api.Controllers
         [HttpGet]
         public virtual Task<List<TResult>> GetAll()
         {
-            return _repository.GetAll(Guid.NewGuid());
+            var userGuid = Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value);
+            return _repository.GetAll(userGuid);
         }
         
         [HttpGet("{identifier}")]
-        public virtual Task<TResult> Get(string identifier)
+        public virtual Task<TResult> Get(Guid identifier)
         {
-            return _repository.Get(Guid.NewGuid(), Guid.NewGuid());
+            var userGuid = Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value);
+            return _repository.Get(identifier, userGuid);
         }
         
         [HttpPost]
@@ -37,14 +41,14 @@ namespace WatchList_api.Controllers
         [HttpPut("{identifier}")]
         public virtual void Update(Guid identifier, TInput watchItem)
         {
-            _repository.Update(identifier, Guid.NewGuid(), watchItem);
+            var userGuid = Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value);
+            _repository.Update(identifier, userGuid, watchItem);
         }
         
         [HttpDelete("{identifier}")]
         public virtual void Delete(Guid identifier)
         {
-            //Get Guid from object
-            var userGuid = Guid.NewGuid();
+            var userGuid = Guid.Parse(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value);
             _repository.Delete(identifier, userGuid);
         }
     }
