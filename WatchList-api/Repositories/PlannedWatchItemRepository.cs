@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WatchList_api.CQRS;
 using WatchList_api.CQRS.ActiveWatchItems.Queries.GetAllPlannedWatchItems;
 using WatchList_api.CQRS.ActiveWatchItems.Queries.GetPlannedWatchItem;
@@ -37,12 +38,13 @@ namespace WatchList_api.Repositories
             return _deletePlannedWatchItem.Execute(new DeletePlannedWatchItemRequest { Id = id, UserId = userId }).Result;
         }
 
-        public PlannedWatchItem Get(Guid id, Guid userId)
+        public Task<PlannedWatchItem> Get(Guid id, Guid userId)
         {
-            return _getPlannedWatchItemQuery.Execute(new GetPlannedWatchItemRequest { Id = id, UserId = userId }).WatchItems;
+            var result = await _getPlannedWatchItemQuery.ExecuteAsync(new GetPlannedWatchItemRequest { Id = id, UserId = userId });
+            return result.WatchItems;
         }
 
-        public List<PlannedWatchItem> GetAll(Guid userId)
+        public async Task<List<PlannedWatchItem>> GetAll(Guid userId)
         {
             return _getAllPlannedWatchItemsQuery.Execute(new GetAllPlannedWatchItemsRequest { UserId = userId }).WatchItems;
         }

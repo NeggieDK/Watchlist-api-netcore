@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Linq;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.DTO;
 using WatchList_api.Repositories.DatabaseConnection;
@@ -17,14 +18,14 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Queries.GetPlannedWatchItem
             _connection = connection;
         }
 
-        public GetPlannedWatchItemResponse Execute(GetPlannedWatchItemRequest request)
+        public async Task<GetPlannedWatchItemResponse> ExecuteAsync(GetPlannedWatchItemRequest request)
         {
             using (var conn = _connection.GetConnection())
             {
                 var sql = $"SELECT id, createdat, priority, title, genres " +
                     $"FROM {SCHEMA}.{TABLE} " +
                     $"WHERE fk_user_id = @UserId and id = @Id";
-                var result = conn.Query<PlannedWatchItem>(sql, new { UserId = request.UserId, Id = request.Id }).SingleOrDefault();
+                var result = await conn.QuerySingleOrDefaultAsync<PlannedWatchItem>(sql, new { UserId = request.UserId, Id = request.Id });
                 return new GetPlannedWatchItemResponse { WatchItems = result };
             }
         }

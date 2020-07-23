@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Linq;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.DTO;
 using WatchList_api.Repositories.DatabaseConnection;
@@ -17,15 +18,15 @@ namespace WatchList_api.CQRS.CompletedWatchItems.Queries.GetAllCompletedWatchIte
             _connection = connection;
         }
 
-        public GetAllCompletedWatchItemsResponse Execute(GetAllCompletedWatchItemsRequest request)
+        public async Task<GetAllCompletedWatchItemsResponse> ExecuteAsync(GetAllCompletedWatchItemsRequest request)
         {
             using (var conn = _connection.GetConnection())
             {
                 var sql = $"SELECT id, createdat, rating, title, genres " +
                     $"FROM {SCHEMA}.{TABLE} " +
                     $"WHERE fk_user_id = @UserId";
-                var result = conn.Query<CompletedWatchItem>(sql, new { UserId = request.UserId }).ToList();
-                return new GetAllCompletedWatchItemsResponse { WatchItems = result };
+                var result = await conn.QueryAsync<CompletedWatchItem>(sql, new { UserId = request.UserId });
+                return new GetAllCompletedWatchItemsResponse { WatchItems = result.ToList() };
             }
         }
     }

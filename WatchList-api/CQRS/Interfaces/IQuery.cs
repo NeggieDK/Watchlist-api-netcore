@@ -1,7 +1,9 @@
-﻿namespace WatchList_api.CQRS.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace WatchList_api.CQRS.Interfaces
 {
-    public interface IQuery<in TRequest, TResponse>
+    public interface IQuery<in TRequest, TResponse> where TResponse : QueryResult
     {
-        public TResponse Execute(TRequest request);
+        public Task<TResponse> ExecuteAsync(TRequest request);
     }
 }

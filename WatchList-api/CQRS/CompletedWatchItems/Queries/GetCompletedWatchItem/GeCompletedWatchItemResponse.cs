@@ -2,7 +2,7 @@
 
 namespace WatchList_api.CQRS.CompletedWatchItems.Queries.GetCompletedWatchItem
 {
-    public class GetCompletedWatchItemResponse
+    public class GetCompletedWatchItemResponse : QueryResult
     {
         public CompletedWatchItem WatchItems { get; set; }
     }

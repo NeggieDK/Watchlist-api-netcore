@@ -3,11 +3,12 @@ using Npgsql;
 using System;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 
 namespace WatchList_api.CQRS
 {
-    public class ErrorLoggingDecorator<TRequest, TResponse> : IQuery<TRequest, TResponse> where TResponse : class
+    public class ErrorLoggingDecorator<TRequest, TResponse> : IQuery<TRequest, TResponse> where TResponse : QueryResult
     {
         private readonly IQuery<TRequest, TResponse> _baseQuery;
         private readonly ILogger<ErrorLoggingDecorator<TRequest, TResponse>> _logger;
@@ -17,12 +18,12 @@ namespace WatchList_api.CQRS
             _logger = logger;
             _baseQuery = baseQuery;
         }
-        public TResponse Execute(TRequest request)
+        public Task<TResponse> ExecuteAsync(TRequest request)
         {
             try
             {
                 _logger.LogInformation($"Executing {_baseQuery.GetType().Name} query");
-                return _baseQuery.Execute(request);
+                return _baseQuery.ExecuteAsync(request);
             }
             catch(PostgresException e)
             {
