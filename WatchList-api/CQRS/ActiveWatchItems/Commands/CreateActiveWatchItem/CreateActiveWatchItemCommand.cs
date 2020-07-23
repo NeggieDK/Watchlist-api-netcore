@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.Repositories.DatabaseConnection;
 
@@ -16,7 +17,7 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
             _connection = connection;
         }
 
-        public CreateActiveWatchItemResponse Execute(CreateActiveWatchItemRequest request)
+        public async Task<CreateActiveWatchItemResponse> ExecuteAsync(CreateActiveWatchItemRequest request)
         {
             var inputItem = request.WatchItem;
             if (inputItem == null) return new CreateActiveWatchItemResponse { Result = new CommandResult(false, null) };
@@ -26,7 +27,7 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
                     $"VALUES(@Id, @WatchItemid, @UserId, @LastEpisodeWatched)";
 
                 var id = Guid.NewGuid();
-                var result = conn.Execute(sql, new { Id = id, WatchItemId = inputItem.WatchItemId, UserId = inputItem.UserId, LastEpisodeWatched = inputItem.LastEpisodeWatched });
+                var result = await conn.ExecuteAsync(sql, new { Id = id, WatchItemId = inputItem.WatchItemId, UserId = inputItem.UserId, LastEpisodeWatched = inputItem.LastEpisodeWatched });
                 return new CreateActiveWatchItemResponse { Result = new CommandResult(result == 1, id) };
             }
         }

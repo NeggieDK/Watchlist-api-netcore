@@ -2,7 +2,7 @@
 
 namespace WatchList_api.CQRS.ActiveWatchItems.Queries.GetPlannedWatchItem
 {
-    public class GetPlannedWatchItemResponse : QueryResult
+    public class GetPlannedWatchItemResponse
     {
         public PlannedWatchItem WatchItems { get; set; }
     }

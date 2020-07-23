@@ -25,7 +25,7 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Queries.GetActiveWatchItem
                     $"FROM {SCHEMA}.{TABLE} " +
                     $"WHERE fk_user_id = @UserId and id = @Id";
                 var result = await conn.QuerySingleOrDefaultAsync<ActiveWatchItem>(sql, new { UserId = request.UserId, Id = request.Id });
-                return new GetActiveWatchItemResponse { Status = QueryExecutionStatus.Success, WatchItems = result };
+                return new GetActiveWatchItemResponse { WatchItems = result };
             }
         }
     }

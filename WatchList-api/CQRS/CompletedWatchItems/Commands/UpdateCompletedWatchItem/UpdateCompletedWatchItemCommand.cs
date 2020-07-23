@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.Repositories.DatabaseConnection;
 
@@ -15,7 +16,7 @@ namespace WatchList_api.CQRS.CompletedWatchItems.Commands.CreateCompletedWatchIt
             _connection = connection;
         }
 
-        public UpdateCompletedWatchItemResponse Execute(UpdateCompletedWatchItemRequest request)
+        public async Task<UpdateCompletedWatchItemResponse> ExecuteAsync(UpdateCompletedWatchItemRequest request)
         {
             using (var conn = _connection.GetConnection())
             {
@@ -23,7 +24,7 @@ namespace WatchList_api.CQRS.CompletedWatchItems.Commands.CreateCompletedWatchIt
                     $"SET rating = @Rating " +
                     $"WHERE id = @Id and fk_user_id = @UserId";
 
-                var result = conn.Execute(sql, new { Id = request.Id, UserId = request.UserId, LastEpisodeWatched = request.WatchItem.Rating });
+                var result = await conn.ExecuteAsync(sql, new { Id = request.Id, UserId = request.UserId, LastEpisodeWatched = request.WatchItem.Rating });
                 return new UpdateCompletedWatchItemResponse { Result = new CommandResult(result == 1, request.Id) };
             }
         }

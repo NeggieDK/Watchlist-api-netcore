@@ -3,7 +3,7 @@ using WatchList_api.DTO;
 
 namespace WatchList_api.CQRS.ActiveWatchItems.Queries.GetAllActiveWatchItems
 {
-    public class GetAllActiveWatchItemsResponse : QueryResult
+    public class GetAllActiveWatchItemsResponse
     {
         public GetAllActiveWatchItemsResponse()
         {

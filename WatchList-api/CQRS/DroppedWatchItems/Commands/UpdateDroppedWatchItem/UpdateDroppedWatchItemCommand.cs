@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.Repositories.DatabaseConnection;
 
@@ -15,7 +16,7 @@ namespace WatchList_api.CQRS.DroppedWatchItems.Commands.CreateDroppedWatchItem
             _connection = connection;
         }
 
-        public UpdateDroppedWatchItemResponse Execute(UpdateDroppedWatchItemRequest request)
+        public async Task<UpdateDroppedWatchItemResponse> ExecuteAsync(UpdateDroppedWatchItemRequest request)
         {
             using (var conn = _connection.GetConnection())
             {
@@ -23,7 +24,7 @@ namespace WatchList_api.CQRS.DroppedWatchItems.Commands.CreateDroppedWatchItem
                     $"SET reason = @Reason " +
                     $"WHERE id = @Id and fk_user_id = @UserId";
 
-                var result = conn.Execute(sql, new { Id = request.Id, UserId = request.UserId, Reason = request.WatchItem.Reason });
+                var result = await conn.ExecuteAsync(sql, new { Id = request.Id, UserId = request.UserId, Reason = request.WatchItem.Reason });
                 return new UpdateDroppedWatchItemResponse { Result = new CommandResult(result == 1, request.Id) };
             }
         }

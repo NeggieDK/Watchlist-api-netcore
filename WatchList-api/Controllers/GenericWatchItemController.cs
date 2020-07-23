@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WatchList_api.DTO;
 using WatchList_api.Repositories;
@@ -16,13 +17,13 @@ namespace WatchList_api.Controllers
         }
 
         [HttpGet]
-        public virtual List<TResult> GetAll()
+        public virtual Task<List<TResult>> GetAll()
         {
             return _repository.GetAll(Guid.NewGuid());
         }
         
         [HttpGet("{identifier}")]
-        public virtual TResult Get(string identifier)
+        public virtual Task<TResult> Get(string identifier)
         {
             return _repository.Get(Guid.NewGuid(), Guid.NewGuid());
         }

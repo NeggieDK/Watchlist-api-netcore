@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.Repositories.DatabaseConnection;
 
@@ -15,7 +16,7 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
             _connection = connection;
         }
 
-        public UpdateActiveWatchItemResponse Execute(UpdateActiveWatchItemRequest request)
+        public async Task<UpdateActiveWatchItemResponse> ExecuteAsync(UpdateActiveWatchItemRequest request)
         {
             using (var conn = _connection.GetConnection())
             {
@@ -23,7 +24,7 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem
                     $"SET last_episode_watched= @LastEpisodeWatched " +
                     $"WHERE id = @Id and fk_user_id = @UserId";
 
-                var result = conn.Execute(sql, new { Id = request.Id, UserId = request.UserId, LastEpisodeWatched = request.WatchItem.LastEpisodeWatched });
+                var result = await conn.ExecuteAsync(sql, new { Id = request.Id, UserId = request.UserId, LastEpisodeWatched = request.WatchItem.LastEpisodeWatched });
                 return new UpdateActiveWatchItemResponse { Result = new CommandResult(result == 1, request.Id) };
             }
         }

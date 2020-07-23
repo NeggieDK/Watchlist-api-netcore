@@ -3,7 +3,7 @@ using WatchList_api.DTO;
 
 namespace WatchList_api.CQRS.CompletedWatchItems.Queries.GetAllCompletedWatchItems
 {
-    public class GetAllCompletedWatchItemsResponse : QueryResult
+    public class GetAllCompletedWatchItemsResponse
     {
         public GetAllCompletedWatchItemsResponse()
         {

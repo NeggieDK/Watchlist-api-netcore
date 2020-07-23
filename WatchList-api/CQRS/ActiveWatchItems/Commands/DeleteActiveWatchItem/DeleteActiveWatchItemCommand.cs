@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.Repositories.DatabaseConnection;
 
@@ -15,14 +16,14 @@ namespace WatchList_api.CQRS.ActiveWatchItems.Commands.DeleteActiveWatchItem
             _connection = connection;
         }
 
-        public DeleteActiveWatchItemResponse Execute(DeleteActiveWatchItemRequest request)
+        public async Task<DeleteActiveWatchItemResponse> ExecuteAsync(DeleteActiveWatchItemRequest request)
         {
             using (var conn = _connection.GetConnection())
             {
                 var sql = $"DELETE FROM {SCHEMA}.{TABLE} " +
                     "WHERE id = @Id AND fk_user_id = @UserId";
 
-                var result = conn.Execute(sql, new { Id = request.Id, UserId = request.UserId});
+                var result = await conn.ExecuteAsync(sql, new { Id = request.Id, UserId = request.UserId});
                 return new DeleteActiveWatchItemResponse { Result = new CommandResult(result == 1, request.Id) };
             }
         }

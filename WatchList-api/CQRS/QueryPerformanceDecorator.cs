@@ -4,7 +4,7 @@ using WatchList_api.CQRS.Interfaces;
 
 namespace WatchList_api.CQRS
 {
-    public class QueryPerformanceDecorator<TRequest, TResponse> : IQuery<TRequest, TResponse> where TResponse : QueryResult
+    public class QueryPerformanceDecorator<TRequest, TResponse> : IQuery<TRequest, TResponse>
     {
         private readonly IQuery<TRequest, TResponse> _baseQuery;
         public QueryPerformanceDecorator(IQuery<TRequest, TResponse> baseQuery)

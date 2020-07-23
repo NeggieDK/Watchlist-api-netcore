@@ -16,7 +16,7 @@ namespace WatchList.IntegrationTests.RepositoryTests
         }
 
         [Fact]
-        public void CreateTest()
+        public async void CreateTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>>();
             var userGuid = Guid.NewGuid();
@@ -27,7 +27,7 @@ namespace WatchList.IntegrationTests.RepositoryTests
                 UserId = userGuid,
                 Rating = 9
             };
-            var result = repo.Create(newWatchitem);
+            var result = await repo.Create(newWatchitem);
             _fixture.TrackGuid(result.Id.GetValueOrDefault());
 
             Assert.True(result.Success);
@@ -35,7 +35,7 @@ namespace WatchList.IntegrationTests.RepositoryTests
         }
 
         [Fact]
-        public void DeleteTest()
+        public async void DeleteTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>>();
             // Create temporary item
@@ -47,27 +47,27 @@ namespace WatchList.IntegrationTests.RepositoryTests
                 UserId = userGuid,
                 Rating = 9
             };
-            var tempResult = repo.Create(newWatchitem);
+            var tempResult = await repo.Create(newWatchitem);
             _fixture.TrackGuid(tempResult.Id.GetValueOrDefault());
 
             Assert.True(tempResult.Success);
             Assert.NotNull(tempResult.Id);
 
-            var result = repo.Delete(tempResult.Id.Value, userGuid);
+            var result = await repo.Delete(tempResult.Id.Value, userGuid);
             Assert.True(result.Success);
             Assert.Equal(tempResult.Id, result.Id);
         }
 
         [Fact]
-        public void DeleteNotExistTest()
+        public async void DeleteNotExistTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>>();
-            var result = repo.Delete(Guid.NewGuid(), Guid.NewGuid());
+            var result = await repo.Delete(Guid.NewGuid(), Guid.NewGuid());
             Assert.False(result.Success);
         }
 
         [Fact]
-        public void UpdateTest()
+        public async void UpdateTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>>();
             // Create temporary item
@@ -79,22 +79,22 @@ namespace WatchList.IntegrationTests.RepositoryTests
                 UserId = userGuid,
                 Rating = 9
             };
-            var tempResult = repo.Create(newWatchitem);
+            var tempResult = await repo.Create(newWatchitem);
             _fixture.TrackGuid(tempResult.Id.GetValueOrDefault());
 
             Assert.True(tempResult.Success);
             Assert.NotNull(tempResult.Id);
 
-            var result = repo.Update(tempResult.Id.Value, userGuid, new CompletedWatchItemChange { Rating = 5 });
+            var result = await repo.Update(tempResult.Id.Value, userGuid, new CompletedWatchItemChange { Rating = 5 });
             Assert.True(result.Success);
             Assert.Equal(tempResult.Id, result.Id);
         }
 
         [Fact]
-        public void UpdateNotExistTest()
+        public async void UpdateNotExistTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<CompletedWatchItem, CompletedWatchItemChange>>();
-            var result = repo.Update(Guid.NewGuid(), Guid.NewGuid(), new CompletedWatchItemChange());
+            var result = await repo.Update(Guid.NewGuid(), Guid.NewGuid(), new CompletedWatchItemChange());
             Assert.False(result.Success);
         }
     }

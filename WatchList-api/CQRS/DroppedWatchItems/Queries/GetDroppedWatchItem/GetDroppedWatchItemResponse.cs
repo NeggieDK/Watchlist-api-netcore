@@ -2,7 +2,7 @@
 
 namespace WatchList_api.CQRS.DroppedWatchItems.Queries.GetDroppedWatchItem
 {
-    public class GetDroppedWatchItemResponse : QueryResult
+    public class GetDroppedWatchItemResponse
     {
         public DroppedWatchItem WatchItems { get; set; }
     }

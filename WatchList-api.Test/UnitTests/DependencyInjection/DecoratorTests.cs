@@ -18,17 +18,5 @@ namespace WatchList_api.Test.UnitTests.DependencyInjection
             var instance = container.GetInstance<IQuery<GetActiveWatchItemRequest, GetActiveWatchItemResponse>>();
             Assert.Equal(typeof(QueryPerformanceDecorator<GetActiveWatchItemRequest, GetActiveWatchItemResponse>), instance.GetType());
         }
-
-        [Fact]
-        public void MultipleDecoratorTest()
-        {
-            var container = new ServiceContainer();
-            container.Register<IQuery<GetActiveWatchItemRequest, GetActiveWatchItemResponse>, GetActiveWatchItemQuery>();
-            container.Decorate<IQuery<GetActiveWatchItemRequest, GetActiveWatchItemResponse>, QueryPerformanceDecorator<GetActiveWatchItemRequest, GetActiveWatchItemResponse>>();
-            container.Decorate<IQuery<GetActiveWatchItemRequest, GetActiveWatchItemResponse>, ErrorLoggingDecorator<GetActiveWatchItemRequest, GetActiveWatchItemResponse>>();
-
-            var instance = container.GetInstance<IQuery<GetActiveWatchItemRequest, GetActiveWatchItemResponse>>();
-            Assert.Equal(typeof(ErrorLoggingDecorator<GetActiveWatchItemRequest, GetActiveWatchItemResponse>), instance.GetType());
-        }
     }
 }

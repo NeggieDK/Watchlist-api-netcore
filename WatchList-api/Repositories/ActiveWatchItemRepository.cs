@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WatchList_api.CQRS;
 using WatchList_api.CQRS.ActiveWatchItems.Commands.CreateActiveWatchItem;
 using WatchList_api.CQRS.ActiveWatchItems.Commands.DeleteActiveWatchItem;
@@ -27,29 +28,36 @@ namespace WatchList_api.Repositories
             _updateActiveWatchItem = updateActiveWatchItem;
         }
 
-        public CommandResult Create(ActiveWatchItemChange watchItem)
+        public ICommand<CreateActiveWatchItemRequest, CreateActiveWatchItemResponse> CreateActiveWatchItem => _createActiveWatchItem;
+
+        public async Task<CommandResult> Create(ActiveWatchItemChange watchItem)
         {
-            return _createActiveWatchItem.Execute(new CreateActiveWatchItemRequest(watchItem)).Result;
+            var result = await CreateActiveWatchItem.ExecuteAsync(new CreateActiveWatchItemRequest(watchItem));
+            return result.Result;
         }
 
-        public CommandResult Delete(Guid id, Guid userId)
+        public async Task<CommandResult> Delete(Guid id, Guid userId)
         {
-            return _deleteActiveWatchItem.Execute(new DeleteActiveWatchItemRequest { Id = id, UserId = userId }).Result;
+            var result = await _deleteActiveWatchItem.ExecuteAsync(new DeleteActiveWatchItemRequest { Id = id, UserId = userId });
+            return result.Result;
         }
 
-        public ActiveWatchItem Get(Guid id, Guid userId)
+        public async Task<ActiveWatchItem> Get(Guid id, Guid userId)
         {
-            return _getActiveWatchItemQuery.Execute(new GetActiveWatchItemRequest { Id = id, UserId = userId }).WatchItems;
+            var result = await _getActiveWatchItemQuery.ExecuteAsync(new GetActiveWatchItemRequest { Id = id, UserId = userId });
+            return result.WatchItems;
         }
 
-        public List<ActiveWatchItem> GetAll(Guid userId)
+        public async Task<List<ActiveWatchItem>> GetAll(Guid userId)
         {
-            return _getAllActiveWatchItemsQuery.Execute(new GetAllActiveWatchItemsRequest { UserId = userId }).WatchItems;
+            var result = await _getAllActiveWatchItemsQuery.ExecuteAsync(new GetAllActiveWatchItemsRequest { UserId = userId });
+            return result.WatchItems;
         }
 
-        public CommandResult Update(Guid id, Guid userId, ActiveWatchItemChange watchItem)
+        public async Task<CommandResult> Update(Guid id, Guid userId, ActiveWatchItemChange watchItem)
         {
-            return _updateActiveWatchItem.Execute(new UpdateActiveWatchItemRequest { Id = id, UserId = userId, WatchItem = watchItem }).Result;
+            var result = await _updateActiveWatchItem.ExecuteAsync(new UpdateActiveWatchItemRequest { Id = id, UserId = userId, WatchItem = watchItem });
+            return result.Result;
         }
     }
 }

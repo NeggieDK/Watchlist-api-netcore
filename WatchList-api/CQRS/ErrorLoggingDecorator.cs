@@ -8,7 +8,7 @@ using WatchList_api.CQRS.Interfaces;
 
 namespace WatchList_api.CQRS
 {
-    public class ErrorLoggingDecorator<TRequest, TResponse> : IQuery<TRequest, TResponse> where TResponse : QueryResult
+    public class ErrorLoggingDecorator<TRequest, TResponse> : IQuery<TRequest, TResponse>
     {
         private readonly IQuery<TRequest, TResponse> _baseQuery;
         private readonly ILogger<ErrorLoggingDecorator<TRequest, TResponse>> _logger;

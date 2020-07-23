@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System;
+using System.Threading.Tasks;
 using WatchList_api.CQRS.Interfaces;
 using WatchList_api.Repositories.DatabaseConnection;
 
@@ -16,7 +17,7 @@ namespace WatchList_api.CQRS.PlannedWatchItems.Commands.CreatePlannedWatchItem
             _connection = connection;
         }
 
-        public CreatePlannedWatchItemResponse Execute(CreatePlannedWatchItemRequest request)
+        public async Task<CreatePlannedWatchItemResponse> ExecuteAsync(CreatePlannedWatchItemRequest request)
         {
             var inputItem = request.WatchItem;
             if (inputItem == null) return new CreatePlannedWatchItemResponse { Result = new CommandResult(false, null) };
@@ -26,7 +27,7 @@ namespace WatchList_api.CQRS.PlannedWatchItems.Commands.CreatePlannedWatchItem
                     $"VALUES(@Id, @WatchItemid, @UserId, @Priority)";
 
                 var id = Guid.NewGuid();
-                var result = conn.Execute(sql, new { Id = id, WatchItemId = inputItem.WatchItemId, UserId = inputItem.UserId, Priority = inputItem.Priority });
+                var result = await conn.ExecuteAsync(sql, new { Id = id, WatchItemId = inputItem.WatchItemId, UserId = inputItem.UserId, Priority = inputItem.Priority });
                 return new CreatePlannedWatchItemResponse { Result = new CommandResult(result == 1, id) };
             }
         }

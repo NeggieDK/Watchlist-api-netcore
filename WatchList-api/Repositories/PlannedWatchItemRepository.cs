@@ -28,17 +28,19 @@ namespace WatchList_api.Repositories
             _updatePlannedWatchItem = updatePlannedWatchItem;
         }
 
-        public CommandResult Create(PlannedWatchItemChange watchItem)
+        public async Task<CommandResult> Create(PlannedWatchItemChange watchItem)
         {
-            return _createPlannedWatchItem.Execute(new CreatePlannedWatchItemRequest(watchItem)).Result;
+            var result = await _createPlannedWatchItem.ExecuteAsync(new CreatePlannedWatchItemRequest(watchItem));
+            return result.Result;
         }
 
-        public CommandResult Delete(Guid id, Guid userId)
+        public async Task<CommandResult> Delete(Guid id, Guid userId)
         {
-            return _deletePlannedWatchItem.Execute(new DeletePlannedWatchItemRequest { Id = id, UserId = userId }).Result;
+            var result = await _deletePlannedWatchItem.ExecuteAsync(new DeletePlannedWatchItemRequest { Id = id, UserId = userId });
+            return result.Result;
         }
 
-        public Task<PlannedWatchItem> Get(Guid id, Guid userId)
+        public async Task<PlannedWatchItem> Get(Guid id, Guid userId)
         {
             var result = await _getPlannedWatchItemQuery.ExecuteAsync(new GetPlannedWatchItemRequest { Id = id, UserId = userId });
             return result.WatchItems;
@@ -46,12 +48,14 @@ namespace WatchList_api.Repositories
 
         public async Task<List<PlannedWatchItem>> GetAll(Guid userId)
         {
-            return _getAllPlannedWatchItemsQuery.Execute(new GetAllPlannedWatchItemsRequest { UserId = userId }).WatchItems;
+            var result = await _getAllPlannedWatchItemsQuery.ExecuteAsync(new GetAllPlannedWatchItemsRequest { UserId = userId });
+            return result.WatchItems;
         }
 
-        public CommandResult Update(Guid id, Guid userId, PlannedWatchItemChange watchItem)
+        public async Task<CommandResult> Update(Guid id, Guid userId, PlannedWatchItemChange watchItem)
         {
-            return _updatePlannedWatchItem.Execute(new UpdatePlannedWatchItemRequest { Id = id, UserId = userId, WatchItem = watchItem }).Result;
+            var result = await _updatePlannedWatchItem.ExecuteAsync(new UpdatePlannedWatchItemRequest { Id = id, UserId = userId, WatchItem = watchItem });
+            return result.Result;
         }
     }
 }

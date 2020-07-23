@@ -17,10 +17,10 @@ namespace WatchList.IntegrationTests.RepositoryTests
         }
 
         [Fact]
-        public void GetAllTest()
+        public async void GetAllTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<PlannedWatchItem, PlannedWatchItemChange>>();
-            var result = repo.GetAll(Guid.Parse("79137da8-4040-428b-b64f-705d54aaf256"));
+            var result = await repo.GetAll(Guid.Parse("79137da8-4040-428b-b64f-705d54aaf256"));
             Assert.NotNull(result);
             Assert.NotEmpty(result);
             Assert.Single(result);
@@ -39,11 +39,11 @@ namespace WatchList.IntegrationTests.RepositoryTests
         }
 
         [Fact]
-        public void GetTest()
+        public async void GetTest()
         {
             var repo = _fixture.Container.GetInstance<IWatchItemRepository<PlannedWatchItem, PlannedWatchItemChange>>();
 
-            var result = repo.Get(Guid.Parse("63eeabf0-3669-449b-aa80-22db40ae7af1"), Guid.Parse("79137da8-4040-428b-b64f-705d54aaf256"));
+            var result = await repo.Get(Guid.Parse("63eeabf0-3669-449b-aa80-22db40ae7af1"), Guid.Parse("79137da8-4040-428b-b64f-705d54aaf256"));
             Assert.NotNull(result);
             Assert.Equal(Guid.Parse("63eeabf0-3669-449b-aa80-22db40ae7af1"), result.Id);
             Assert.Equal("Harry Potter", result.Title);
